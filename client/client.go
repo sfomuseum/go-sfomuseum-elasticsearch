@@ -1,4 +1,4 @@
-package elasticsearch
+package client
 
 import (
 	es "github.com/elastic/go-elasticsearch"
