@@ -9,7 +9,7 @@ import (
 	"io"
 )
 
-func IndexDocument(es_client *es.Client, es_index string, doc_id string, doc interface{}) error {
+func IndexDocument(ctx context.Context, es_client *es.Client, es_index string, doc_id string, doc interface{}) error {
 
 	b, err := json.Marshal(doc)
 
@@ -19,10 +19,17 @@ func IndexDocument(es_client *es.Client, es_index string, doc_id string, doc int
 
 	fh := bytes.NewReader(b)
 
-	return IndexDocumentWithReader(es_client, es_index, doc_id, fh)
+	return IndexDocumentWithReader(ctx, es_client, es_index, doc_id, fh)
 }
 
-func IndexDocumentWithReader(es_client *es.Client, es_index string, doc_id string, fh io.Reader) error {
+func IndexDocumentWithReader(ctx context.Context, es_client *es.Client, es_index string, doc_id string, fh io.Reader) error {
+
+	select {
+	case <-ctx.Done():
+		return nil
+	default:
+		// pass
+	}
 
 	req := esapi.IndexRequest{
 		Index:      es_index,
@@ -31,7 +38,7 @@ func IndexDocumentWithReader(es_client *es.Client, es_index string, doc_id strin
 		Refresh:    "true",
 	}
 
-	_, err := req.Do(context.Background(), es_client)
+	_, err := req.Do(ctx, es_client)
 
 	if err != nil {
 		return err
