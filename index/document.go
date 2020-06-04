@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	es "github.com/elastic/go-elasticsearch"
 	esapi "github.com/elastic/go-elasticsearch/esapi"
 	"io"
+	"io/ioutil"
 )
 
 func IndexDocument(ctx context.Context, es_client *es.Client, es_index string, doc_id string, doc interface{}) error {
@@ -38,10 +40,20 @@ func IndexDocumentWithReader(ctx context.Context, es_client *es.Client, es_index
 		Refresh:    "true",
 	}
 
-	_, err := req.Do(ctx, es_client)
+	rsp, err := req.Do(ctx, es_client)
 
 	if err != nil {
 		return err
+	}
+
+	defer rsp.Body.Close()
+
+	switch rsp.StatusCode {
+	case 200, 201:
+	// pass
+	default:
+		body, _ := ioutil.ReadAll(rsp.Body)
+		return errors.New(string(body))
 	}
 
 	return nil
