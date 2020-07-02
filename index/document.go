@@ -5,8 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	es "github.com/elastic/go-elasticsearch"
-	esapi "github.com/elastic/go-elasticsearch/esapi"
+	es "github.com/elastic/go-elasticsearch/v7"
+	esapi "github.com/elastic/go-elasticsearch/v7/esapi"
 	"io"
 	"io/ioutil"
 )

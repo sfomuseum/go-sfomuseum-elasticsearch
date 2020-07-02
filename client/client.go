@@ -1,7 +1,7 @@
 package client
 
 import (
-	es "github.com/elastic/go-elasticsearch"
+	es "github.com/elastic/go-elasticsearch/v7"
 )
 
 func NewClientWithEndpoint(es_endpoint string) (*es.Client, error) {

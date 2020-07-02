@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	es "github.com/elastic/go-elasticsearch"
+	es "github.com/elastic/go-elasticsearch/v7"
 	"github.com/sfomuseum/go-sfomuseum-elasticsearch/queries"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
